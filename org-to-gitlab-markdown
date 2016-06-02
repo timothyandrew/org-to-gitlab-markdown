@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+
+operations = {
+  remove_notes: lambda do |lines|
+    lines.select { |line| line[0] == "*"  }
+  end,
+
+  replace_todo: lambda do |lines|
+    lines.map { |line| line.gsub(/TODO/, '- [ ]') }
+  end,
+
+  replace_done: lambda do |lines|
+    lines.map { |line| line.gsub(/DONE/, '- [x]') }
+  end,
+
+  replace_stars_with_indent: lambda do |lines|
+    indent_per_star = 4
+    lines.map do |line|
+      stars = line.match(/^\*+/)[0].size
+      line.sub(/^\*+/, ' ' * indent_per_star * stars)
+    end
+  end,
+
+  remove_common_indent: lambda do |lines|
+    common_indent = lines.map { |line| line.match(/^\s+/)[0].size }.min
+    lines.map { |line| line[common_indent..-1] }
+  end
+}
+
+lines = ARGF.read.split("\n")
+output = operations.values.reduce(lines) do |value, operation|
+  operation.call(value)
+end
+
+puts output
