@@ -25,6 +25,10 @@ operations = {
   remove_common_indent: lambda do |lines|
     common_indent = lines.map { |line| line.match(/^\s+/)[0].size }.min
     lines.map { |line| line[common_indent..-1] }
+  end,
+
+  convert_links: lambda do |lines|
+    lines.map { |line| line.gsub(/\[\[(.+?)\]\[(.+?)\]\]/, '[\2](\1)') }
   end
 }
 
