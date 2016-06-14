@@ -7,11 +7,15 @@ operations = {
   end,
 
   replace_todo: lambda do |lines|
-    lines.map { |line| line.gsub(/TODO/, '- [ ]') }
+    lines.map { |line| line.gsub(/TODO/, '[ ] ') }
   end,
 
   replace_done: lambda do |lines|
-    lines.map { |line| line.gsub(/DONE/, '- [x]') }
+    lines.map { |line| line.gsub(/DONE/, '[x] ') }
+  end,
+
+  add_bullet_points: lambda do |lines|
+    lines.map { |line| line.sub(/^(\*+)/, '\1-') }
   end,
 
   replace_stars_with_indent: lambda do |lines|
@@ -29,6 +33,10 @@ operations = {
 
   convert_links: lambda do |lines|
     lines.map { |line| line.gsub(/\[\[(.+?)\]\[(.+?)\]\]/, '[\2](\1)') }
+  end,
+
+  convert_strikethrough: lambda do |lines|
+    lines.map { |line| line.gsub(/\+([^+]+?)\+/, '~~\1~~') }
   end
 }
 
